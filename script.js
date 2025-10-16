@@ -36,8 +36,7 @@ requestAnimationFrame(draw);
 
 // Coin flip
 const coin = document.getElementById('coin');
-// Fallback to the coin wrapper if .rotor isn't present
-const rotorEl = coin.querySelector('.rotor') || coin;
+const rotorEl = coin ? (coin.querySelector('.rotor') || coin) : null;
 const btn = document.getElementById('flipBtn');
 const resultEl = document.getElementById('result');
 
@@ -60,6 +59,7 @@ function flip(){
   const heads = Math.random() > 0.5;
 
   // Reset any transform on the rotor element and force reflow
+  if(!rotorEl){ flipping=false; return; }
   rotorEl.style.transform = 'none';
   void rotorEl.offsetWidth;
 
@@ -70,7 +70,7 @@ function flip(){
       { transform: 'rotateY(0deg) translateZ(0)' },
       { transform: `rotateY(${totalRot}deg) translateZ(0)` }
     ],
-    { duration: 1200 + flips*120, easing: 'cubic-bezier(.14,.9,.3,1)' }
+    { duration: 1200 + flips*120, easing: 'cubic-bezier(.14,.9,.3,1)', fill: 'forwards' }
   );
 
   // temporary glow during flip
