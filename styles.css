@@ -50,6 +50,7 @@ canvas#bg{position:fixed;inset:0;z-index:0}
   cursor:pointer;
   position:relative;
 }
+.coin .rotor{position:absolute;inset:0;transform-style:preserve-3d;will-change:transform}
 .coin .face{
   position:absolute;inset:0;
   display:flex;align-items:center;justify-content:center;
@@ -62,30 +63,43 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 .coin .back{transform:rotateY(180deg)}
 .coin-svg{width:85%;height:85%}
 
+/* subtle rim and shine with pseudo elements */
+.coin::before,
+.coin::after{content:"";position:absolute;inset:8%;border-radius:50%;pointer-events:none}
+.coin::before{box-shadow:0 0 0 2px rgba(102,217,255,0.12) inset, 0 0 40px rgba(102,217,255,0.08) inset}
+.coin::after{background:radial-gradient(120% 60% at 30% 20%, rgba(255,255,255,0.12), transparent 50%)}
+
 .controls{display:flex;align-items:center;gap:16px;margin-top:18px}
 .btn{
-  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
-  color: #021528;
-  border: 1px solid rgba(102,217,255,0.25);
+  background: linear-gradient(180deg, rgba(7,16,38,0.6), rgba(7,16,38,0.3));
+  color: #e6f6ff;
+  border: 1px solid rgba(110,243,255,0.45);
   padding:12px 18px;
   border-radius:12px;
   cursor:pointer;
   font-weight:700;
-  box-shadow: 0 6px 18px rgba(2,21,40,0.6), 0 0 24px rgba(102,217,255,0.10) inset;
+  box-shadow: 0 6px 18px rgba(2,21,40,0.6), 0 0 24px rgba(102,217,255,0.18) inset, 0 0 0 2px rgba(110,243,255,0.10);
   position:relative;
 }
 .btn:after{
   content:"";position:absolute;inset:0;border-radius:12px;
-  background:linear-gradient(90deg, rgba(102,217,255,0.12), rgba(138,255,179,0.10));
+  background:linear-gradient(90deg, rgba(110,243,255,0.22), rgba(138,255,179,0.18));
   mix-blend-mode:screen;pointer-events:none
 }
-.btn:hover{transform:translateY(-1px)}
+.btn:hover{transform:translateY(-2px); box-shadow: 0 10px 26px rgba(2,21,40,0.7), 0 0 30px rgba(102,217,255,0.25) inset}
 .btn:active{transform:translateY(0)}
 
+/* stronger focus for accessibility */
+.btn:focus{outline:2px solid rgba(110,243,255,0.6); outline-offset:3px}
+
+/* give the button a more distinctive label color option */
+.btn .label-contrast{color:#0f172a}
+
 .result{
-  min-width:48px;
-  background:var(--glass);
-  padding:8px 12px;border-radius:10px;font-weight:700
+  min-width:64px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+  border:1px solid rgba(110,243,255,0.25);
+  padding:8px 14px;border-radius:12px;font-weight:800;letter-spacing:0.02em
 }
 .hint{opacity:0.6;margin-top:12px;font-size:13px}
 
@@ -101,4 +115,7 @@ canvas#bg{position:fixed;inset:0;z-index:0}
 }
 
 /* focus styles */
-#coin:focus{outline:3px solid rgba(102,217,255,0.25);outline-offset:6px}
+#coin:focus{outline:3px solid rgba(102,217,255,0.35);outline-offset:6px}
+
+/* flipping glow */
+.coin.flipping::before{box-shadow:0 0 0 2px rgba(110,243,255,0.3) inset, 0 0 50px rgba(110,243,255,0.25) inset}

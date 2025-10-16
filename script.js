@@ -36,6 +36,7 @@ requestAnimationFrame(draw);
 
 // Coin flip
 const coin = document.getElementById('coin');
+const rotor = coin.querySelector('.rotor');
 const btn = document.getElementById('flipBtn');
 const resultEl = document.getElementById('result');
 
@@ -57,23 +58,29 @@ function flip(){
   const flips = Math.floor(rand(3,9));
   const heads = Math.random() > 0.5;
 
-  // Reset any transform and force reflow
-  coin.style.transform = 'none';
-  void coin.offsetWidth;
+  // Reset any transform on rotor and force reflow
+  rotor.style.transform = 'none';
+  void rotor.offsetWidth;
 
   // Rotate around Y to reveal correct face (front=H at 0deg, back=T at 180deg)
   const totalRot = 360 * (flips*2) + (heads ? 0 : 180);
-  coin.animate(
+  const anim = rotor.animate(
     [
       { transform: 'rotateY(0deg) translateZ(0)' },
       { transform: `rotateY(${totalRot}deg) translateZ(0)` }
     ],
     { duration: 1200 + flips*120, easing: 'cubic-bezier(.14,.9,.3,1)' }
-  ).onfinish = () => {
+  );
+
+  // temporary glow during flip
+  coin.classList.add('flipping');
+
+  anim.onfinish = () => {
     // Apply final orientation
-    coin.style.transform = heads ? 'rotateY(0deg)' : 'rotateY(180deg)';
+    rotor.style.transform = heads ? 'rotateY(0deg)' : 'rotateY(180deg)';
     showResult(heads ? 'heads' : 'tails');
     flipping=false;
+    coin.classList.remove('flipping');
   };
 }
 
