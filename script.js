@@ -36,7 +36,8 @@ requestAnimationFrame(draw);
 
 // Coin flip
 const coin = document.getElementById('coin');
-const rotor = coin.querySelector('.rotor');
+// Fallback to the coin wrapper if .rotor isn't present
+const rotorEl = coin.querySelector('.rotor') || coin;
 const btn = document.getElementById('flipBtn');
 const resultEl = document.getElementById('result');
 
@@ -58,13 +59,13 @@ function flip(){
   const flips = Math.floor(rand(3,9));
   const heads = Math.random() > 0.5;
 
-  // Reset any transform on rotor and force reflow
-  rotor.style.transform = 'none';
-  void rotor.offsetWidth;
+  // Reset any transform on the rotor element and force reflow
+  rotorEl.style.transform = 'none';
+  void rotorEl.offsetWidth;
 
   // Rotate around Y to reveal correct face (front=H at 0deg, back=T at 180deg)
   const totalRot = 360 * (flips*2) + (heads ? 0 : 180);
-  const anim = rotor.animate(
+  const anim = rotorEl.animate(
     [
       { transform: 'rotateY(0deg) translateZ(0)' },
       { transform: `rotateY(${totalRot}deg) translateZ(0)` }
@@ -77,7 +78,7 @@ function flip(){
 
   anim.onfinish = () => {
     // Apply final orientation
-    rotor.style.transform = heads ? 'rotateY(0deg)' : 'rotateY(180deg)';
+    rotorEl.style.transform = heads ? 'rotateY(0deg)' : 'rotateY(180deg)';
     showResult(heads ? 'heads' : 'tails');
     flipping=false;
     coin.classList.remove('flipping');
